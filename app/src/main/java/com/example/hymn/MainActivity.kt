@@ -1,13 +1,13 @@
 package com.example.hymn
 
+
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
+import android.view.View
+import android.widget.Toast
 import com.example.hymn.adapter.HymnAdapter
-import com.example.hymn.api.ApiResponse
 import com.example.hymn.api.Failure
 import com.example.hymn.api.Success
 import com.example.hymn.databinding.ActivityMainBinding
@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        showProgressBar()
         setUpView()
         setUpAdapter()
     }
@@ -37,11 +38,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpView() {
         hymnViewModel.getHymnData().observe(this, { response ->
+            Log.i("OBSERVABLE", response.toString())
             when(response) {
                 is Failure -> {
+                    Log.i("ERROR", "ERROR")
                     displayError(response.throwable)
                 }
                 is Success<*> -> {
+                    Log.i("SUCCESS","SUCCESSFULL")
                     displayData(response.data as Response)
                 }
             }
@@ -49,13 +53,36 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpAdapter() {
-        adapter = HymnAdapter()
+        adapter = HymnAdapter(HymnAdapter.OnClickListener {
+            Toast.makeText(this, "Title ${it.title}", Toast.LENGTH_LONG).show()
+            navigateToHymn(it)
+        })
         binding.recyclerview.adapter = adapter
+    }
+
+    private fun navigateToHymn(hymn: Song) {
+        val intent = Intent(this, HymnDetailActivity::class.java)
+        intent.putExtra("extra_item", hymn)
+        startActivity(intent)
+    }
+
+    private fun hideProgressBar() {
+        binding.progressBar.visibility = View.GONE
+    }
+
+    private fun showData() {
+        binding.recyclerview.visibility = View.VISIBLE
+    }
+
+    private fun showProgressBar() {
+        binding.progressBar.visibility = View.VISIBLE
     }
 
     private fun displayData(data: Response) {
         val hymns = data.data
         adapter.submitList(hymns)
+        hideProgressBar()
+        showData()
     }
 
     private fun displayError(error: Throwable) {
