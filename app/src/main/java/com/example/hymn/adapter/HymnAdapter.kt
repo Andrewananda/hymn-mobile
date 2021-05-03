@@ -5,10 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hymn.Hymn
 import com.example.hymn.databinding.HymnItemBinding
 import com.example.hymn.model.Song
 
-class HymnAdapter : ListAdapter<Song, HymnAdapter.NewsViewHolder>(HymnDiffUtil) {
+class HymnAdapter(private val clickListener: OnClickListener) : ListAdapter<Song, HymnAdapter.NewsViewHolder>(HymnDiffUtil) {
 
     inner class NewsViewHolder(private val binding: HymnItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Song) {
@@ -26,6 +27,9 @@ class HymnAdapter : ListAdapter<Song, HymnAdapter.NewsViewHolder>(HymnDiffUtil) 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
+        holder.itemView.setOnClickListener {
+            clickListener.onClick(item)
+        }
     }
 
 
@@ -38,5 +42,9 @@ class HymnAdapter : ListAdapter<Song, HymnAdapter.NewsViewHolder>(HymnDiffUtil) 
             return oldItem.id == newItem.id
         }
 
+    }
+
+    class OnClickListener(val clickListener: (hymn : Song) -> Unit) {
+        fun onClick(hymn: Song) = clickListener(hymn)
     }
 }
