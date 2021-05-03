@@ -50,6 +50,6 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun displayError(error: Throwable) {
-        Log.e("MAINACTIVITYERROR", error.message.toString())
+        Log.e("MAIN_ACTIVITY_ERROR", error.message.toString())
     }
 }
