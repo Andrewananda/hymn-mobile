@@ -1,4 +1,4 @@
-package com.example.hymn
+package com.example.hymn.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,10 +11,10 @@ import javax.inject.Inject
 class Repository @Inject constructor(private val apiService: ApiService) {
 
     private val hymnLiveData = MutableLiveData<ApiResponse>()
-            val getHymnLiveData: LiveData<ApiResponse>
+             val getHymnLiveData: LiveData<ApiResponse>
             get() = hymnLiveData
 
-     suspend fun fetchHymns() : LiveData<ApiResponse> {
+     private suspend fun fetchFromApi() {
         try {
             val hymns = apiService.getSongsAsync()
             val hymnData = hymns.await()
@@ -22,11 +22,10 @@ class Repository @Inject constructor(private val apiService: ApiService) {
         } catch (t: Throwable) {
             hymnLiveData.value = Failure(t)
         }
-         return getHymnLiveData
     }
 
-    /**
-     * todo Check for data on local or remote
-     */
-    // suspend fun getHymns() = fetchHymns()
+    suspend fun fetchHymns() {
+        fetchFromApi()
+    }
+
 }

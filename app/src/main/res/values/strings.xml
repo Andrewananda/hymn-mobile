@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Hymn</string>
+    <string name="textTitle">Mbeleni naendelea</string>
+    <string name="chorus">Mbeleni naendelea ninazidi kutembea maombi u yasikie ewe Bwana unpandishe</string>
+    <string name="hymn_number">2</string>
 </resources>
