@@ -3,7 +3,7 @@ package com.example.hymn.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.hymn.Repository
+import com.example.hymn.repository.Repository
 import com.example.hymn.api.ApiResponse
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -24,7 +24,8 @@ class HymnViewModel @Inject constructor(private val hymnRepository: Repository) 
     }
 
     private suspend fun getRepoData () {
-        hymnLiveData.postValue(hymnRepository.fetchHymns().value)
+        hymnRepository.fetchHymns()
+        hymnLiveData.postValue(hymnRepository.getHymnLiveData.value)
     }
 
 
