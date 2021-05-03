@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         hymnViewModel.getHymnData().observe(this, { response ->
             when(response) {
                 is Failure -> {
-                    Log.e("MAINACTIVITYERROR", response.throwable.toString())
+                    displayError(response.throwable)
                 }
                 is Success<*> -> {
                     displayText(response.data as Response)
@@ -46,5 +46,10 @@ class MainActivity : AppCompatActivity() {
         data.data.forEach { res ->
             textView.text = res.chorus
         }
+    }
+
+
+    private fun displayError(error: Throwable) {
+        Log.e("MAINACTIVITYERROR", error.message.toString())
     }
 }
