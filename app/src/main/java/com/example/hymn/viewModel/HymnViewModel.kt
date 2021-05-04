@@ -28,6 +28,12 @@ class HymnViewModel @Inject constructor(private val hymnRepository: Repository) 
         hymnLiveData.postValue(hymnRepository.getHymnLiveData.value)
     }
 
+    fun searchHymn(text: String) {
+        coroutineScope.launch {
+            hymnRepository.searchHymn(text)
+        }
+    }
+
 
     override fun onCleared() {
         super.onCleared()

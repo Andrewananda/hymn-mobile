@@ -28,4 +28,19 @@ class Repository @Inject constructor(private val apiService: ApiService) {
         fetchFromApi()
     }
 
+     suspend fun searchHymn(text: String) {
+        search(text)
+    }
+
+    private suspend fun search(text: String) {
+
+        val query = apiService.queryHymnsAsync(text)
+        try {
+            val response = query.await()
+            hymnLiveData.value = Success(response)
+        } catch (t: Throwable) {
+            hymnLiveData.value = Failure(t)
+        }
+    }
+
 }

@@ -5,7 +5,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import android.widget.SearchView
 import android.widget.Toast
 import com.example.hymn.adapter.HymnAdapter
 import com.example.hymn.api.Failure
@@ -23,6 +26,34 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var adapter : HymnAdapter
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+
+        val search = menu?.findItem(R.id.search_bar)
+
+        val searchView = search?.actionView as SearchView
+        searchView.queryHint = "Search"
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(newText: String?): Boolean {
+                Toast.makeText(this@MainActivity, "$newText", Toast.LENGTH_LONG).show()
+                if (newText != null) {
+                    hymnViewModel.searchHymn(newText)
+                   // showProgressBar()
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+
+        })
+
+        return super.onCreateOptionsMenu(menu)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as Hymn).appComponent.inject(this)
