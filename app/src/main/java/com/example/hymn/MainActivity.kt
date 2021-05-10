@@ -85,7 +85,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpAdapter() {
         adapter = HymnAdapter(HymnAdapter.OnClickListener {
-            Toast.makeText(this, "Title ${it.title}", Toast.LENGTH_LONG).show()
             navigateToHymn(it)
         })
         binding.recyclerview.adapter = adapter

@@ -1,8 +1,10 @@
 package com.example.hymn
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
+import android.view.MenuItem
 import com.example.hymn.databinding.ActivityHymnDetailBinding
 import com.example.hymn.model.Song
 
@@ -20,5 +22,20 @@ class HymnDetailActivity : AppCompatActivity() {
         binding.textView.text = Html.fromHtml(hymnSong?.song)
 
         supportActionBar!!.title = hymnSong?.title
+
+        val actionBar = supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            android.R.id.home -> {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
