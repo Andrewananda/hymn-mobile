@@ -12,8 +12,8 @@ interface ApiService {
     fun getSongsAsync() : Deferred<Response>
 
     @FormUrlEncoded
-    @POST("search_hymn")
+    @POST("search")
     fun queryHymnsAsync(
-            @Field("title") title: String
+            @Field("value") title: String
     ) : Deferred<Response>
 }

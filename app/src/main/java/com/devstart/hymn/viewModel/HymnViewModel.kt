@@ -13,6 +13,7 @@ class HymnViewModel @Inject constructor(private val hymnRepository: Repository) 
     private val hymnLiveData = MutableLiveData<ApiResponse>()
 
     fun getHymnData() : LiveData<ApiResponse> = hymnLiveData
+    fun getSearchData() : LiveData<ApiResponse> = hymnRepository.searchLiveData
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
