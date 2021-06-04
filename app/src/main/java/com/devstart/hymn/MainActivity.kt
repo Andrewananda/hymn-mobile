@@ -40,8 +40,9 @@ class MainActivity : AppCompatActivity() {
             override fun onQueryTextSubmit(newText: String?): Boolean {
                 Toast.makeText(this@MainActivity, "$newText", Toast.LENGTH_LONG).show()
                 if (newText != null) {
-                    hymnViewModel.searchHymn(newText)
-                   // showProgressBar()
+                   showProgressBar()
+                   hymnViewModel.searchHymn(newText)
+                   observeSearchResponse()
                 }
                 return true
             }
@@ -83,6 +84,22 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    private fun observeSearchResponse() {
+        hymnViewModel.getSearchData().observe(this, {response ->
+            Log.i("SearchResponse", response.toString())
+            when(response) {
+                is Failure -> {
+                    Log.i("ERROR", "ERROR")
+                    displayError(response.throwable)
+                }
+                is Success<*> -> {
+                    Log.i("SUCCESS","SUCCESSFULL")
+                    displayData(response.data as Response)
+                }
+            }
+        })
+    }
+
     private fun setUpAdapter() {
         adapter = HymnAdapter(HymnAdapter.OnClickListener {
             navigateToHymn(it)
@@ -104,15 +121,27 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerview.visibility = View.VISIBLE
     }
 
+    private fun hideData() {
+        binding.recyclerview.visibility = View.GONE
+    }
+
     private fun showProgressBar() {
         binding.progressBar.visibility = View.VISIBLE
     }
 
     private fun displayData(data: Response) {
-        val hymns = data.data
-        adapter.submitList(hymns)
-        hideProgressBar()
-        showData()
+        if(data.data.isEmpty()) {
+            binding.hymnLabel.text = "Hymns Not Found"
+            binding.hymnLabel.visibility = View.VISIBLE
+            hideData()
+            hideProgressBar()
+        }else {
+            binding.hymnLabel.visibility = View.GONE
+            val hymns = data.data
+            adapter.submitList(hymns)
+            hideProgressBar()
+            showData()
+        }
     }
 
     private fun displayError(error: Throwable) {

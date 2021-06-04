@@ -13,6 +13,9 @@ class Repository @Inject constructor(private val apiService: ApiService) {
     private val hymnLiveData = MutableLiveData<ApiResponse>()
              val getHymnLiveData: LiveData<ApiResponse>
             get() = hymnLiveData
+    private val setSearchLiveData = MutableLiveData<ApiResponse>()
+    val searchLiveData : LiveData<ApiResponse>
+    get() = setSearchLiveData
 
      private suspend fun fetchFromApi() {
         try {
@@ -37,9 +40,9 @@ class Repository @Inject constructor(private val apiService: ApiService) {
         val query = apiService.queryHymnsAsync(text)
         try {
             val response = query.await()
-            hymnLiveData.value = Success(response)
+            setSearchLiveData.value = Success(response)
         } catch (t: Throwable) {
-            hymnLiveData.value = Failure(t)
+            setSearchLiveData.value = Failure(t)
         }
     }
 
