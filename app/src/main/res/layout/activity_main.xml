@@ -55,7 +55,7 @@
                 android:id="@+id/error_image"
                 android:layout_width="wrap_content"
                 android:layout_height="150dp"
-                android:src="@drawable/hymn_logo"
+                android:src="@drawable/disconnect"
                 android:contentDescription="@string/img"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
