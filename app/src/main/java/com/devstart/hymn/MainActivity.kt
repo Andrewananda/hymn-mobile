@@ -75,11 +75,9 @@ class MainActivity : AppCompatActivity() {
             Log.i("OBSERVABLE", response.toString())
             when(response) {
                 is Failure -> {
-                    Log.i("ERROR", "ERROR")
                     displayError(response.throwable)
                 }
                 is Success<*> -> {
-                    Log.i("SUCCESS","SUCCESSFULL")
                     displayData(response.data as Response)
                 }
             }
