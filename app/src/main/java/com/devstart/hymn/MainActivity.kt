@@ -65,14 +65,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.progressBar.show()
-        setUpView()
+        observeHymns()
         setUpAdapter()
     }
 
 
-    private fun setUpView() {
+    private fun observeHymns() {
         hymnViewModel.getHymnData().observe(this, { response ->
-            Log.i("OBSERVABLE", response.toString())
             when(response) {
                 is Failure -> {
                     displayError(response.throwable)
