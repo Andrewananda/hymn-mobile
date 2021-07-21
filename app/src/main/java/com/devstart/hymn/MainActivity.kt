@@ -131,7 +131,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun displayData(data: Response) {
         if(data.data.isEmpty()) {
-            binding.hymnLabel.text = "Hymns Not Found"
+            binding.hymnLabel.text = "Hymn Not Found"
             binding.hymnLabel.visibility = View.VISIBLE
             hideData()
             hideProgressBar()
