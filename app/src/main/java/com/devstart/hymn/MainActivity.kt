@@ -65,6 +65,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.progressBar.show()
+        binding.errorLayout.hide()
         observeHymns()
         setUpAdapter()
     }
