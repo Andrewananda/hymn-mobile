@@ -72,6 +72,8 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun observeHymns() {
+        binding.progressBar.show()
+        binding.errorLayout.hide()
         hymnViewModel.getHymnData().observe(this, { response ->
             when(response) {
                 is Failure -> {
@@ -129,6 +131,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayError(error: Throwable) {
-        Log.e("MAIN_ACTIVITY_ERROR", error.message.toString())
+        binding.progressBar.hide()
+        binding.errorMessage.text = "An Error Occurred"
+        binding.errorLayout.show()
+        binding.retry.setOnClickListener {
+            observeHymns()
+        }
     }
 }
