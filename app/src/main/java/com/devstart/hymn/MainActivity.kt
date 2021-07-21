@@ -16,6 +16,8 @@ import com.devstart.hymn.api.Success
 import com.devstart.hymn.databinding.ActivityMainBinding
 import com.devstart.hymn.model.Response
 import com.devstart.hymn.model.Song
+import com.devstart.hymn.util.hide
+import com.devstart.hymn.util.show
 import com.devstart.hymn.viewModel.HymnViewModel
 import javax.inject.Inject
 
@@ -40,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             override fun onQueryTextSubmit(newText: String?): Boolean {
                 Toast.makeText(this@MainActivity, "$newText", Toast.LENGTH_LONG).show()
                 if (newText != null) {
-                   showProgressBar()
+                    binding.progressBar.show()
                    hymnViewModel.searchHymn(newText)
                    observeSearchResponse()
                 }
@@ -62,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        showProgressBar()
+        binding.progressBar.show()
         setUpView()
         setUpAdapter()
     }
@@ -113,34 +115,18 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun hideProgressBar() {
-        binding.progressBar.visibility = View.GONE
-    }
-
-    private fun showData() {
-        binding.recyclerview.visibility = View.VISIBLE
-    }
-
-    private fun hideData() {
-        binding.recyclerview.visibility = View.GONE
-    }
-
-    private fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
-    }
-
     private fun displayData(data: Response) {
         if(data.data.isEmpty()) {
             binding.hymnLabel.text = "Hymn Not Found"
             binding.hymnLabel.visibility = View.VISIBLE
-            hideData()
-            hideProgressBar()
+            binding.recyclerview.hide()
+            binding.progressBar.hide()
         }else {
             binding.hymnLabel.visibility = View.GONE
             val hymns = data.data
             adapter.submitList(hymns)
-            hideProgressBar()
-            showData()
+            binding.progressBar.hide()
+            binding.recyclerview.show()
         }
     }
 
