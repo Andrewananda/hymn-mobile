@@ -72,8 +72,6 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun observeHymns() {
-        binding.progressBar.show()
-        binding.errorLayout.hide()
         hymnViewModel.getHymnData().observe(this, { response ->
             when(response) {
                 is Failure -> {
