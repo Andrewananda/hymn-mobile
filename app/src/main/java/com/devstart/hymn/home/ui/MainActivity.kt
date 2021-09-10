@@ -1,4 +1,4 @@
-package com.devstart.hymn
+package com.devstart.hymn.home.ui
 
 
 import android.content.Intent
@@ -10,15 +10,16 @@ import android.view.MenuInflater
 import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
-import com.devstart.hymn.adapter.HymnAdapter
+import com.devstart.hymn.hymn_detail.ui.HymnDetailActivity
+import com.devstart.hymn.R
 import com.devstart.hymn.api.Failure
 import com.devstart.hymn.api.Success
 import com.devstart.hymn.databinding.ActivityMainBinding
-import com.devstart.hymn.model.Response
-import com.devstart.hymn.model.Song
+import com.devstart.hymn.data.model.Response
+import com.devstart.hymn.data.model.Song
+import com.devstart.hymn.home.viewModel.HymnViewModel
 import com.devstart.hymn.util.hide
 import com.devstart.hymn.util.show
-import com.devstart.hymn.viewModel.HymnViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

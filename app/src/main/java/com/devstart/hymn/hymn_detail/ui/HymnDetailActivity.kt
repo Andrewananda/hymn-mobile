@@ -1,4 +1,4 @@
-package com.devstart.hymn
+package com.devstart.hymn.hymn_detail.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,7 +6,8 @@ import android.os.Bundle
 import android.text.Html
 import android.view.MenuItem
 import com.devstart.hymn.databinding.ActivityHymnDetailBinding
-import com.devstart.hymn.model.Song
+import com.devstart.hymn.home.ui.MainActivity
+import com.devstart.hymn.data.model.Song
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

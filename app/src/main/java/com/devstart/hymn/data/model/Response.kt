@@ -1,4 +1,4 @@
-package com.devstart.hymn.model
+package com.devstart.hymn.data.model
 
 import com.squareup.moshi.Json
 

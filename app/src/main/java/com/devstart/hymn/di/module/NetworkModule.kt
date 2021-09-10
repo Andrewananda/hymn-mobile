@@ -1,6 +1,6 @@
 package com.devstart.hymn.di.module
 
-import com.devstart.hymn.api.ApiService
+import com.devstart.hymn.data.api.ApiService
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

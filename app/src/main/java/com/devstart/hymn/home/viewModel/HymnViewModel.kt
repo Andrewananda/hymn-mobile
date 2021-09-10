@@ -1,9 +1,9 @@
-package com.devstart.hymn.viewModel
+package com.devstart.hymn.home.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.devstart.hymn.repository.Repository
+import com.devstart.hymn.home.repository.Repository
 import com.devstart.hymn.api.ApiResponse
 import kotlinx.coroutines.*
 import javax.inject.Inject

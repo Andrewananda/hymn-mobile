@@ -1,9 +1,9 @@
-package com.devstart.hymn.repository
+package com.devstart.hymn.home.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.devstart.hymn.api.ApiResponse
-import com.devstart.hymn.api.ApiService
+import com.devstart.hymn.data.api.ApiService
 import com.devstart.hymn.api.Failure
 import com.devstart.hymn.api.Success
 import javax.inject.Inject

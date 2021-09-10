@@ -1,4 +1,4 @@
-package com.devstart.hymn.adapter
+package com.devstart.hymn.home.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.devstart.hymn.databinding.HymnItemBinding
-import com.devstart.hymn.model.Song
+import com.devstart.hymn.data.model.Song
 
-class HymnAdapter(private val clickListener: OnClickListener) : ListAdapter<Song, HymnAdapter.NewsViewHolder>(HymnDiffUtil) {
+class HymnAdapter(private val clickListener: OnClickListener) : ListAdapter<Song, HymnAdapter.NewsViewHolder>(
+    HymnDiffUtil
+) {
 
     inner class NewsViewHolder(private val binding: HymnItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Song) {

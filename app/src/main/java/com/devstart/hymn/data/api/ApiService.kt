@@ -1,6 +1,6 @@
-package com.devstart.hymn.api
+package com.devstart.hymn.data.api
 
-import com.devstart.hymn.model.Response
+import com.devstart.hymn.data.model.Response
 import kotlinx.coroutines.Deferred
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
