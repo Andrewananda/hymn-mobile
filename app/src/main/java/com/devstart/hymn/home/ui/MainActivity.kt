@@ -78,9 +78,11 @@ class MainActivity : AppCompatActivity() {
             when(response) {
                 is Failure -> {
                     displayError(response.throwable)
+                    Log.i("HymnResponseError", response.toString())
                 }
                 is Success<*> -> {
                     displayData(response.data as Response)
+                    Log.i("HymnResponse", response.toString())
                 }
             }
         })

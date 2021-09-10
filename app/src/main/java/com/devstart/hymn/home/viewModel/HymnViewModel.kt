@@ -1,5 +1,6 @@
 package com.devstart.hymn.home.viewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,7 +16,7 @@ class HymnViewModel @Inject constructor(private val hymnRepository: Repository) 
     fun getHymnData() : LiveData<ApiResponse> = hymnLiveData
     fun getSearchData() : LiveData<ApiResponse> = hymnRepository.searchLiveData
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
 
     init {
@@ -24,9 +25,11 @@ class HymnViewModel @Inject constructor(private val hymnRepository: Repository) 
         }
     }
 
-    private suspend fun getRepoData () {
-        hymnRepository.fetchHymns()
-        hymnLiveData.postValue(hymnRepository.getHymnLiveData.value)
+    private fun getRepoData () {
+        coroutineScope.launch {
+            hymnRepository.fetchHymns()
+            hymnLiveData.postValue(hymnRepository.getHymnLiveData.value)
+        }
     }
 
     fun searchHymn(text: String) {
