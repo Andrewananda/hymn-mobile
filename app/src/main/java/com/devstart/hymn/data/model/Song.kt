@@ -1,10 +1,12 @@
 package com.devstart.hymn.data.model
 
 import android.os.Parcelable
+import androidx.room.Entity
 import kotlinx.android.parcel.Parcelize
 import com.squareup.moshi.Json
 
 @Parcelize
+@Entity(tableName = "songs")
 data class Song(
     @Json(name = "id") val id: Int,
     @Json(name = "title") val title: String,
