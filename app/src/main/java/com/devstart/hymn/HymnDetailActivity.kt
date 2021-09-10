@@ -7,7 +7,9 @@ import android.text.Html
 import android.view.MenuItem
 import com.devstart.hymn.databinding.ActivityHymnDetailBinding
 import com.devstart.hymn.model.Song
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HymnDetailActivity : AppCompatActivity() {
 
     private val binding by lazy {

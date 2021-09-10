@@ -19,8 +19,10 @@ import com.devstart.hymn.model.Song
 import com.devstart.hymn.util.hide
 import com.devstart.hymn.util.show
 import com.devstart.hymn.viewModel.HymnViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     @Inject
@@ -59,8 +61,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as Hymn).appComponent.inject(this)
-
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
