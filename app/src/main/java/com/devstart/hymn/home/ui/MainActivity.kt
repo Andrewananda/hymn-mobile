@@ -17,6 +17,7 @@ import com.devstart.hymn.api.Success
 import com.devstart.hymn.databinding.ActivityMainBinding
 import com.devstart.hymn.data.model.Response
 import com.devstart.hymn.data.model.Song
+import com.devstart.hymn.data.model.SongResponse
 import com.devstart.hymn.home.viewModel.HymnViewModel
 import com.devstart.hymn.util.hide
 import com.devstart.hymn.util.show
@@ -108,7 +109,7 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerview.adapter = adapter
     }
 
-    private fun navigateToHymn(hymn: Song) {
+    private fun navigateToHymn(hymn: SongResponse) {
         val intent = Intent(this, HymnDetailActivity::class.java)
         intent.putExtra("extra_item", hymn)
         startActivity(intent)

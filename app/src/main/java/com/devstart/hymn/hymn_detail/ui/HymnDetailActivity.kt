@@ -8,6 +8,7 @@ import android.view.MenuItem
 import com.devstart.hymn.databinding.ActivityHymnDetailBinding
 import com.devstart.hymn.home.ui.MainActivity
 import com.devstart.hymn.data.model.Song
+import com.devstart.hymn.data.model.SongResponse
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,7 +19,7 @@ class HymnDetailActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val hymnSong = intent.getParcelableExtra<Song>("extra_item")
+        val hymnSong = intent.getParcelableExtra<SongResponse>("extra_item")
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
