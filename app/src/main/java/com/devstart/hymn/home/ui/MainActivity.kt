@@ -21,6 +21,7 @@ import com.devstart.hymn.home.viewModel.HymnViewModel
 import com.devstart.hymn.util.hide
 import com.devstart.hymn.util.show
 import dagger.hilt.android.AndroidEntryPoint
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity() {
                 }else {
                     hymnViewModel.searchHymn("")
                 }
+
                 return true
             }
 
@@ -91,7 +93,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeSearchResponse() {
         hymnViewModel.getSearchData().observe(this, {response ->
-            Log.i("SearchResponse", response.toString())
             when(response) {
                 is Failure -> {
                     displayError(response.throwable)
@@ -131,11 +132,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayError(error: Throwable) {
-        binding.progressBar.hide()
-        binding.errorMessage.text = getString(R.string.error_occurred)
-        binding.errorLayout.show()
-        binding.retry.setOnClickListener {
-            observeHymns()
+        when(error){
+            is HttpException -> {
+                //Network Error
+                binding.progressBar.hide()
+                binding.errorMessage.text = getString(R.string.internet_error)
+                binding.errorLayout.show()
+                binding.retry.setOnClickListener {
+                    observeHymns()
+                }
+            }
+            else -> {
+                binding.progressBar.hide()
+                binding.errorMessage.text = getString(R.string.error_occurred)
+                binding.errorLayout.show()
+                binding.retry.setOnClickListener {
+                    observeHymns()
+                }
+            }
         }
     }
 }
