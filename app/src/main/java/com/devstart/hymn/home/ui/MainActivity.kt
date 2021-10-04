@@ -1,4 +1,4 @@
-package com.devstart.hymn
+package com.devstart.hymn.home.ui
 
 
 import android.content.Intent
@@ -10,15 +10,20 @@ import android.view.MenuInflater
 import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
-import com.devstart.hymn.adapter.HymnAdapter
+import com.devstart.hymn.hymn_detail.ui.HymnDetailActivity
+import com.devstart.hymn.R
 import com.devstart.hymn.api.Failure
 import com.devstart.hymn.api.Success
 import com.devstart.hymn.databinding.ActivityMainBinding
-import com.devstart.hymn.model.Response
-import com.devstart.hymn.model.Song
-import com.devstart.hymn.viewModel.HymnViewModel
+import com.devstart.hymn.data.model.Response
+import com.devstart.hymn.data.model.SongResponse
+import com.devstart.hymn.home.viewModel.HymnViewModel
+import com.devstart.hymn.util.hide
+import com.devstart.hymn.util.show
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     @Inject
@@ -38,17 +43,21 @@ class MainActivity : AppCompatActivity() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(newText: String?): Boolean {
-                Toast.makeText(this@MainActivity, "$newText", Toast.LENGTH_LONG).show()
                 if (newText != null) {
-                   showProgressBar()
+                    binding.progressBar.show()
                    hymnViewModel.searchHymn(newText)
                    observeSearchResponse()
+                }else {
+                    hymnViewModel.searchHymn("")
                 }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                return false
+                binding.progressBar.show()
+                hymnViewModel.searchHymn(newText)
+                observeSearchResponse()
+                return true
             }
 
         })
@@ -57,28 +66,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as Hymn).appComponent.inject(this)
-
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        showProgressBar()
-        setUpView()
+        binding.progressBar.show()
+        binding.errorLayout.hide()
+        observeHymns()
         setUpAdapter()
     }
 
 
-    private fun setUpView() {
+    private fun observeHymns() {
         hymnViewModel.getHymnData().observe(this, { response ->
-            Log.i("OBSERVABLE", response.toString())
             when(response) {
                 is Failure -> {
-                    Log.i("ERROR", "ERROR")
                     displayError(response.throwable)
                 }
                 is Success<*> -> {
-                    Log.i("SUCCESS","SUCCESSFULL")
-                    displayData(response.data as Response)
+                   displayData(response.data as List<SongResponse>)
                 }
             }
         })
@@ -89,12 +94,10 @@ class MainActivity : AppCompatActivity() {
             Log.i("SearchResponse", response.toString())
             when(response) {
                 is Failure -> {
-                    Log.i("ERROR", "ERROR")
                     displayError(response.throwable)
                 }
                 is Success<*> -> {
-                    Log.i("SUCCESS","SUCCESSFULL")
-                    displayData(response.data as Response)
+                    displayData(response.data as List<SongResponse>)
                 }
             }
         })
@@ -107,44 +110,32 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerview.adapter = adapter
     }
 
-    private fun navigateToHymn(hymn: Song) {
+    private fun navigateToHymn(hymn: SongResponse) {
         val intent = Intent(this, HymnDetailActivity::class.java)
         intent.putExtra("extra_item", hymn)
         startActivity(intent)
     }
 
-    private fun hideProgressBar() {
-        binding.progressBar.visibility = View.GONE
-    }
-
-    private fun showData() {
-        binding.recyclerview.visibility = View.VISIBLE
-    }
-
-    private fun hideData() {
-        binding.recyclerview.visibility = View.GONE
-    }
-
-    private fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
-    }
-
-    private fun displayData(data: Response) {
-        if(data.data.isEmpty()) {
-            binding.hymnLabel.text = "Hymns Not Found"
+    private fun displayData(data: List<SongResponse>) {
+        if(data.isNullOrEmpty()) {
+            binding.hymnLabel.text = getText(R.string.no_hymn_found)
             binding.hymnLabel.visibility = View.VISIBLE
-            hideData()
-            hideProgressBar()
+            binding.recyclerview.hide()
+            binding.progressBar.hide()
         }else {
             binding.hymnLabel.visibility = View.GONE
-            val hymns = data.data
-            adapter.submitList(hymns)
-            hideProgressBar()
-            showData()
+            adapter.submitList(data)
+            binding.progressBar.hide()
+            binding.recyclerview.show()
         }
     }
 
     private fun displayError(error: Throwable) {
-        Log.e("MAIN_ACTIVITY_ERROR", error.message.toString())
+        binding.progressBar.hide()
+        binding.errorMessage.text = getString(R.string.error_occurred)
+        binding.errorLayout.show()
+        binding.retry.setOnClickListener {
+            observeHymns()
+        }
     }
 }

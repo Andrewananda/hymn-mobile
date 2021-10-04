@@ -13,15 +13,15 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.Hymn">
-        <activity android:name="com.devstart.hymn.SplashScreenActivity" android:theme="@style/Theme.NoActionBar">
+        <activity android:name="com.devstart.hymn.splash.SplashScreenActivity" android:theme="@style/Theme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.devstart.hymn.HymnDetailActivity" />
-        <activity android:name="com.devstart.hymn.MainActivity"  />
+        <activity android:name="com.devstart.hymn.hymn_detail.ui.HymnDetailActivity" />
+        <activity android:name="com.devstart.hymn.home.ui.MainActivity"  />
 
         <meta-data
             android:name="preloaded_fonts"

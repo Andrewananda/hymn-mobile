@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.devstart.hymn.viewModel.HymnViewModel" />
+            type="com.devstart.hymn.home.viewModel.HymnViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView
