@@ -8,33 +8,24 @@ import com.devstart.hymn.data.api.ApiService
 import com.devstart.hymn.api.Failure
 import com.devstart.hymn.api.Success
 import com.devstart.hymn.data.dao.SongDao
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class Repository @Inject constructor(private val apiService: ApiService, private val songDao: SongDao) {
 
-
     private val setSearchLiveData = MutableLiveData<ApiResponse>()
     val searchLiveData : LiveData<ApiResponse>
     get() = setSearchLiveData
 
-     private suspend fun fetchFromApi() {
+     private suspend fun fetchFromApi() = flow {
         try {
             val hymns = apiService.getSongsAsync()
             val hymnData = hymns.await()
             songDao.insertSongResponse(hymnData.data)
-            fetchAllSongs()
+            emit(Success(songDao.fetchAllSongs()))
         } catch (t: Throwable) {
             Log.i("FetchingFromApiError", t.localizedMessage)
-           // mutableHymnData.postValue(Failure(t))
-        }
-    }
-
-    private fun fetchAllSongs() = flow {
-        try {
-            val songs = songDao.fetchAllSongs()
-            emit(Success(songs))
-        }catch (t: Throwable) {
             emit(Failure(t))
         }
     }
@@ -45,7 +36,9 @@ class Repository @Inject constructor(private val apiService: ApiService, private
              if (!hymns.isNullOrEmpty()){
                  emit(Success(hymns))
              }else{
-                 fetchFromApi()
+                 fetchFromApi().collect {
+                     emit(it)
+                 }
              }
          }catch (t: Throwable) {
              emit(Failure(t))
