@@ -16,7 +16,6 @@ import com.devstart.hymn.api.Failure
 import com.devstart.hymn.api.Success
 import com.devstart.hymn.databinding.ActivityMainBinding
 import com.devstart.hymn.data.model.Response
-import com.devstart.hymn.data.model.Song
 import com.devstart.hymn.data.model.SongResponse
 import com.devstart.hymn.home.viewModel.HymnViewModel
 import com.devstart.hymn.util.hide
@@ -77,12 +76,12 @@ class MainActivity : AppCompatActivity() {
         hymnViewModel.getHymnData().observe(this, { response ->
             when(response) {
                 is Failure -> {
+                    Log.i("Response", response.toString())
                     displayError(response.throwable)
-                    Log.i("HymnResponseError", response.toString())
                 }
                 is Success<*> -> {
-                    displayData(response.data as Response)
-                    Log.i("HymnResponse", response.toString())
+                    Log.i("Response", response.toString())
+                   displayData(response.data as List<SongResponse>)
                 }
             }
         })
@@ -98,7 +97,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 is Success<*> -> {
                     Log.i("SUCCESS","SUCCESSFULL")
-                    displayData(response.data as Response)
+                    displayData(response.data as List<SongResponse>)
                 }
             }
         })
@@ -117,16 +116,15 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun displayData(data: Response) {
-        if(data.data.isEmpty()) {
+    private fun displayData(data: List<SongResponse>) {
+        if(data.isNullOrEmpty()) {
             binding.hymnLabel.text = "Hymn Not Found"
             binding.hymnLabel.visibility = View.VISIBLE
             binding.recyclerview.hide()
             binding.progressBar.hide()
         }else {
             binding.hymnLabel.visibility = View.GONE
-            val hymns = data.data
-            adapter.submitList(hymns)
+            adapter.submitList(data)
             binding.progressBar.hide()
             binding.recyclerview.show()
         }

@@ -1,10 +1,8 @@
 package com.devstart.hymn.data.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import com.devstart.hymn.data.model.Song
+import com.devstart.hymn.data.model.SongResponse
 
 @Dao
 interface SongDao {
@@ -16,4 +14,11 @@ interface SongDao {
 
     @Query("SELECT * FROM songs")
     fun getAllSongs() : List<Song>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertSongResponse(songs: List<SongResponse>)
+
+    @Query("SELECT * FROM song_response ORDER BY id DESC")
+    fun fetchAllSongs(): List<SongResponse>
+
 }
