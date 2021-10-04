@@ -1,9 +1,5 @@
 package com.devstart.hymn.home.repository
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.devstart.hymn.api.ApiResponse
 import com.devstart.hymn.data.api.ApiService
 import com.devstart.hymn.api.Failure
 import com.devstart.hymn.api.Success
@@ -14,10 +10,6 @@ import javax.inject.Inject
 
 class Repository @Inject constructor(private val apiService: ApiService, private val songDao: SongDao) {
 
-    private val setSearchLiveData = MutableLiveData<ApiResponse>()
-    val searchLiveData : LiveData<ApiResponse>
-    get() = setSearchLiveData
-
      private suspend fun fetchFromApi() = flow {
         try {
             val hymns = apiService.getSongsAsync()
@@ -25,7 +17,6 @@ class Repository @Inject constructor(private val apiService: ApiService, private
             songDao.insertSongResponse(hymnData.data)
             emit(Success(songDao.fetchAllSongs()))
         } catch (t: Throwable) {
-            Log.i("FetchingFromApiError", t.localizedMessage)
             emit(Failure(t))
         }
     }
@@ -45,18 +36,12 @@ class Repository @Inject constructor(private val apiService: ApiService, private
          }
     }
 
-     suspend fun searchHymn(text: String) {
-        search(text)
-    }
-
-    private suspend fun search(text: String) {
-
-        val query = apiService.queryHymnsAsync(text)
+      fun searchHymn(text: String?) = flow {
         try {
-            val response = query.await()
-            setSearchLiveData.value = Success(response)
-        } catch (t: Throwable) {
-            setSearchLiveData.value = Failure(t)
+            val query = songDao.querySongs(text)
+            emit(Success(query))
+        }catch (t: Throwable) {
+            emit(Failure(t))
         }
     }
 

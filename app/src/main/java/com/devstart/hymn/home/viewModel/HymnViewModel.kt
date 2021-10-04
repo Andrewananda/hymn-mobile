@@ -12,9 +12,10 @@ import javax.inject.Inject
 class HymnViewModel @Inject constructor(private val hymnRepository: Repository) : ViewModel() {
 
     private val mutableHymnLiveData = MutableLiveData<ApiResponse>()
+    private val mutableSearchResponse = MutableLiveData<ApiResponse>()
 
     fun getHymnData() : LiveData<ApiResponse> = mutableHymnLiveData
-    fun getSearchData() : LiveData<ApiResponse> = hymnRepository.searchLiveData
+    fun getSearchData() : LiveData<ApiResponse> = mutableSearchResponse
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
@@ -33,9 +34,17 @@ class HymnViewModel @Inject constructor(private val hymnRepository: Repository) 
         }
     }
 
-    fun searchHymn(text: String) {
-        coroutineScope.launch {
-            hymnRepository.searchHymn(text)
+    fun searchHymn(text: String?) {
+        if (text != null) {
+            if (text.isBlank()){
+                getRepoData()
+            }else{
+                coroutineScope.launch {
+                    hymnRepository.searchHymn(text).collect {
+                        mutableSearchResponse.postValue(it)
+                    }
+                }
+            }
         }
     }
 

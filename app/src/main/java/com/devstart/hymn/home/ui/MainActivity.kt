@@ -43,17 +43,21 @@ class MainActivity : AppCompatActivity() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(newText: String?): Boolean {
-                Toast.makeText(this@MainActivity, "$newText", Toast.LENGTH_LONG).show()
                 if (newText != null) {
                     binding.progressBar.show()
                    hymnViewModel.searchHymn(newText)
                    observeSearchResponse()
+                }else {
+                    hymnViewModel.searchHymn("")
                 }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                return false
+                binding.progressBar.show()
+                hymnViewModel.searchHymn(newText)
+                observeSearchResponse()
+                return true
             }
 
         })
@@ -76,11 +80,9 @@ class MainActivity : AppCompatActivity() {
         hymnViewModel.getHymnData().observe(this, { response ->
             when(response) {
                 is Failure -> {
-                    Log.i("Response", response.toString())
                     displayError(response.throwable)
                 }
                 is Success<*> -> {
-                    Log.i("Response", response.toString())
                    displayData(response.data as List<SongResponse>)
                 }
             }
@@ -92,11 +94,9 @@ class MainActivity : AppCompatActivity() {
             Log.i("SearchResponse", response.toString())
             when(response) {
                 is Failure -> {
-                    Log.i("ERROR", "ERROR")
                     displayError(response.throwable)
                 }
                 is Success<*> -> {
-                    Log.i("SUCCESS","SUCCESSFULL")
                     displayData(response.data as List<SongResponse>)
                 }
             }
