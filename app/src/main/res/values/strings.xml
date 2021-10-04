@@ -7,4 +7,5 @@
     <string name="logo_description">logo</string>
     <string name="no_hymn_found">No hymn found</string>
     <string name="img">img</string>
+    <string name="error_occurred">An Error Occurred</string>
 </resources>

@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun displayData(data: List<SongResponse>) {
         if(data.isNullOrEmpty()) {
-            binding.hymnLabel.text = "Hymn Not Found"
+            binding.hymnLabel.text = getText(R.string.no_hymn_found)
             binding.hymnLabel.visibility = View.VISIBLE
             binding.recyclerview.hide()
             binding.progressBar.hide()
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun displayError(error: Throwable) {
         binding.progressBar.hide()
-        binding.errorMessage.text = "An Error Occurred"
+        binding.errorMessage.text = getString(R.string.error_occurred)
         binding.errorLayout.show()
         binding.retry.setOnClickListener {
             observeHymns()
