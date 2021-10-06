@@ -10,6 +10,10 @@ import android.view.MenuInflater
 import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.work.Operation
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.devstart.hymn.hymn_detail.ui.HymnDetailActivity
 import com.devstart.hymn.R
 import com.devstart.hymn.api.Failure
@@ -18,10 +22,12 @@ import com.devstart.hymn.databinding.ActivityMainBinding
 import com.devstart.hymn.data.model.Response
 import com.devstart.hymn.data.model.SongResponse
 import com.devstart.hymn.home.viewModel.HymnViewModel
+import com.devstart.hymn.home.workManager.UpdateDatabaseWorker
 import com.devstart.hymn.util.hide
 import com.devstart.hymn.util.show
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.HttpException
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -75,6 +81,21 @@ class MainActivity : AppCompatActivity() {
         binding.errorLayout.hide()
         observeHymns()
         setUpAdapter()
+        observeRemoteData()
+    }
+
+    private fun observeRemoteData() {
+         val workManager = WorkManager.getInstance(application)
+        val periodicRequest = PeriodicWorkRequestBuilder<UpdateDatabaseWorker>(1, TimeUnit.MINUTES).build()
+         val request = workManager.enqueue(periodicRequest)
+
+        request.state.observe(this, Observer {
+            when(it){
+                is Operation.State.SUCCESS -> {
+                    Log.i("SuccessResponse", request.result.toString())
+                }
+            }
+        })
     }
 
 
